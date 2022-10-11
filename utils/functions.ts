@@ -9,7 +9,10 @@ export function formDataAsDict(event: React.FormEvent<HTMLFormElement>) {
   return data;
 }
 
-export function popFromDict(dict: object, key: string): [object, any] {
+export function popFromDict(
+  dict: Record<string, any>,
+  key: string
+): [object, any] {
   let newDict = { ...dict };
   let poppedKey = dict[key];
   delete newDict[key];
@@ -20,6 +23,6 @@ export function popFromDict(dict: object, key: string): [object, any] {
 export const generateAxiosConfig = (window: Window) => {
   console.log(window.sessionStorage.getItem("token"));
   return {
-    headers: { Authorization: window.sessionStorage.getItem("token") },
+    headers: { Authorization: window.sessionStorage.getItem("token") ?? false },
   };
 };

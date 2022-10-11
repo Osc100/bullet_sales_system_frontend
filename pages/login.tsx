@@ -18,7 +18,7 @@ const Home: NextPage = () => {
     axios
       .post(BACKEND_URL + "login/", formData)
       .then((res) => {
-        window.sessionStorage.setItem("token", `Token ${res.data.token}`);
+        window.sessionStorage.setItem("token", `Bearer ${res.data.token}`);
         window.sessionStorage.setItem(
           "user",
           `${res.data.user.first_name} ${res.data.user.last_name}`
@@ -31,18 +31,23 @@ const Home: NextPage = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center justify-center h-screen flex-col mx-[8%]"
+      className="flex items-center justify-center h-screen flex-col mx-[8%] "
     >
-      <div className="w-[32rem]">
-        <Input
-          type="text"
-          name="username"
-          descriptiveText="Nombre de usuario"
-        />
-        <Input type="password" name="password" descriptiveText="Contraseña" />
-        <button formAction="submit" className="w-full mt-8 btn btn-accent">
-          Iniciar Sesión
-        </button>
+      <div className="p-10 border shadow-2xl border-base-100 rounded-2xl">
+        <div className="w-[32rem] ">
+          <h1 className="py-4 text-4xl font-bold text-center transition-colors duration-300 btn-ghost rounded-3xl">
+            Bullet Sales System
+          </h1>
+          <Input
+            type="text"
+            name="username"
+            descriptiveText="Nombre de usuario"
+          />
+          <Input type="password" name="password" descriptiveText="Contraseña" />
+          <button formAction="submit" className="w-full mt-8 btn btn-accent">
+            Iniciar Sesión
+          </button>
+        </div>
       </div>
     </form>
   );

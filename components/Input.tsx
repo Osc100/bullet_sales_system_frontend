@@ -15,7 +15,7 @@ interface InputProps
 
 const Input: FC<InputProps> = (props) => {
   const errors = useRecoilValue(apiErrorsAtom);
-  let inputError: string;
+  let inputError: string | false = false;
 
   for (const [key, value] of Object.entries(errors)) {
     if (key === props.name) {

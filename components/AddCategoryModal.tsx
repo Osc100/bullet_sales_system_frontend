@@ -37,9 +37,10 @@ const AddCategoryModal: FC<AddCategoryModalProps> = ({ onCloseModal }) => {
       modalID="AddCategoryModal"
       containerClasses={"flex flex-col items-center"}
     >
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="" onSubmit={handleSubmit}>
         <Input
           name="name"
+          className=""
           descriptiveText="Ingrese el nombre de la categoría"
         />
         <button className="w-full mt-3 btn btn-accent">GUARDAR</button>

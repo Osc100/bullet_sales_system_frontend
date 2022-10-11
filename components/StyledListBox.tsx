@@ -31,7 +31,7 @@ function StyledListBox<T>({
 }: StyledListBoxProps<T>): JSX.Element {
   const errors = useRecoilValue(apiErrorsAtom);
 
-  let inputError: string;
+  let inputError = "";
 
   for (const [key, value] of Object.entries(errors)) {
     if (key === formKeyName) {
@@ -58,7 +58,7 @@ function StyledListBox<T>({
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left btn btn-accent">
             <span className="block truncate">
-              {selected ? selected[objKey] : "Seleccione una opcion"}
+              {selected[objKey] ?? "Seleccione una opcion"}
             </span>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
               <HiChevronDown className="w-5 h-5 " aria-hidden="true" />

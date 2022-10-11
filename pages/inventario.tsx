@@ -3,7 +3,6 @@ import { NextPage } from "next";
 import React, { Fragment, useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import AddCategoryModal from "../components/AddCategoryModal";
-import AutoTable from "../components/AutoTable";
 import FormTableContainer from "../components/FormTableContainer";
 import Input from "../components/Input";
 import StyledListBox from "../components/StyledListBox";
@@ -11,12 +10,11 @@ import { successStringAtom } from "../state/atoms";
 import { apiErrorsSelector } from "../state/selectors";
 import { CATEGORIES_URL, PRODUCTS_URL } from "../utils/consts";
 import { formDataAsDict, generateAxiosConfig } from "../utils/functions";
-
 const Home: NextPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const setApiErrors = useSetRecoilState(apiErrorsSelector);
   const [selectedCategory, setSelectedCategory] = useState<Category>();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [successMessage, setSuccessMessage] = useRecoilState(successStringAtom);
   const [addCategory, setAddCategory] = useState(false);
 
@@ -33,7 +31,7 @@ const Home: NextPage = () => {
       .catch((err) => setApiErrors(err));
 
     axios
-      .get<any[]>(PRODUCTS_URL + "list_as_table/", axiosConfig)
+      .get<Product[]>(PRODUCTS_URL + "list_as_table/", axiosConfig)
       .then((res) => {
         console.log(res.data);
         setProducts(res.data);
@@ -90,11 +88,12 @@ const Home: NextPage = () => {
             GUARDAR
           </button>
         </form>
-        {Object.values(products).length > 0 ? (
+        <table></table>
+        {/* {Object.values(products).length > 0 ? (
           <AutoTable tableObj={products} />
         ) : (
           <table className="table" />
-        )}
+        )} */}
       </FormTableContainer>
     </Fragment>
   );

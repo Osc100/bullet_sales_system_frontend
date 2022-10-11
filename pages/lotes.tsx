@@ -1,8 +1,8 @@
+import { useReactTable } from "@tanstack/react-table";
 import axios from "axios";
 import { NextPage } from "next";
 import React, { Fragment, useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import AutoTable from "../components/AutoTable";
 import FormTableContainer from "../components/FormTableContainer";
 import Input from "../components/Input";
 import StyledListBox from "../components/StyledListBox";
@@ -15,8 +15,13 @@ const Inventario: NextPage = () => {
   const setApiErrors = useSetRecoilState(apiErrorsSelector);
   const [selectedProduct, setSelectedProduct] = useState<any>();
   const [batchs, setBatchs] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [successMessage, setSuccessMessage] = useRecoilState(successStringAtom);
+
+  const table = useReactTable<Product>({
+    data: products,
+    columns: products.keys(),
+  });
 
   useEffect(() => {
     const axiosConfig = generateAxiosConfig(window);
@@ -30,7 +35,7 @@ const Inventario: NextPage = () => {
       .catch((err) => setApiErrors(err));
 
     axios
-      .get<any[]>(PRODUCTS_URL, axiosConfig)
+      .get<Product[]>(PRODUCTS_URL, axiosConfig)
       .then((res) => setProducts(res.data))
       .catch((err) => setApiErrors(err));
 
@@ -89,11 +94,24 @@ const Inventario: NextPage = () => {
             GUARDAR LOTE
           </button>
         </form>
-        {Object.values(batchs).length > 0 ? (
+        {/* {Object.values(batchs).length > 0 ? (
           <AutoTable tableObj={batchs} />
         ) : (
           <table className="table" />
-        )}
+        )} */}
+        {
+          <table>
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header, index) => (
+                    <th key={header.id}>{header.column.columnDef.header}</th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+          </table>
+        }
       </FormTableContainer>
     </Fragment>
   );

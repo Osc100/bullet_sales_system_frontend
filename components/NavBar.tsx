@@ -15,6 +15,11 @@ const NavBar: FC<NavBarProps> = () => {
   const [profileName, setProfileName] = useState<string>("");
   const router = useRouter();
 
+  const logout = () => {
+    sessionStorage.removeItem("token");
+    router.push("/login");
+  };
+
   useEffect(() => {
     setProfileName(sessionStorage.getItem("user"));
   }, []);
@@ -46,7 +51,25 @@ const NavBar: FC<NavBarProps> = () => {
 
       <div className="navbar-end mr-[9%]">
         <p className="mr-4">{profileName}</p>
-        <IoPersonCircle size={32} />
+
+        <div className="dropdown dropdown-end">
+          <label tabIndex={0} className="btn btn-ghost rounded-btn">
+            <IoPersonCircle size={32} />
+          </label>
+          <ul
+            tabIndex={0}
+            className="p-2 mt-4 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a
+                className="btn btn-outline btn-success"
+                onClick={() => logout()}
+              >
+                Cerrar Sesión
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
