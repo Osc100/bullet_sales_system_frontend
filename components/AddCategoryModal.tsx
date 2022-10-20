@@ -1,8 +1,7 @@
 import axios from "axios";
 import { FC, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { successStringAtom } from "../state/atoms";
-import { apiErrorsSelector } from "../state/selectors";
+import { apiErrorsSelector, successStringSelector } from "../state/selectors";
 import { CATEGORIES_URL } from "../utils/consts";
 import { formDataAsDict, generateAxiosConfig } from "../utils/functions";
 import EmptyModal from "./EmpyModal";
@@ -14,7 +13,7 @@ interface AddCategoryModalProps {
 
 const AddCategoryModal: FC<AddCategoryModalProps> = ({ onCloseModal }) => {
   const [checked, _] = useState(true);
-  const setSuccessString = useSetRecoilState(successStringAtom);
+  const setSuccessString = useSetRecoilState(successStringSelector);
   const setApiErrors = useSetRecoilState(apiErrorsSelector);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

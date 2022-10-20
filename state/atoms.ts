@@ -14,3 +14,8 @@ export const successStringAtom = atom({
   key: "successStringAtom",
   default: "",
 });
+
+export const optionsSaleSelectedAtom = atom<CompleteSale>({
+  key: "optionsSaleSelectedAtom",
+  default: undefined,
+});

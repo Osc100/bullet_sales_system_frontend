@@ -1,35 +1,32 @@
-import { useReactTable } from "@tanstack/react-table";
 import axios from "axios";
 import { NextPage } from "next";
 import React, { Fragment, useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import EditIconButton from "../components/EditIconButton";
+import EditModal from "../components/EditModal";
 import FormTableContainer from "../components/FormTableContainer";
 import Input from "../components/Input";
 import StyledListBox from "../components/StyledListBox";
-import { successStringAtom } from "../state/atoms";
-import { apiErrorsSelector } from "../state/selectors";
+import { apiErrorsSelector, successStringSelector } from "../state/selectors";
 import { BATCHS_URL, PRODUCTS_URL } from "../utils/consts";
 import { formDataAsDict, generateAxiosConfig } from "../utils/functions";
 
 const Inventario: NextPage = () => {
   const setApiErrors = useSetRecoilState(apiErrorsSelector);
   const [selectedProduct, setSelectedProduct] = useState<any>();
-  const [batchs, setBatchs] = useState([]);
+  const [batchs, setBatchs] = useState<Batch[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [successMessage, setSuccessMessage] = useRecoilState(successStringAtom);
-
-  const table = useReactTable<Product>({
-    data: products,
-    columns: products.keys(),
-  });
+  const [successMessage, setSuccessMessage] = useRecoilState(
+    successStringSelector
+  );
+  const [deleteBatch, setDeleteBatch] = useState<Batch | undefined>();
 
   useEffect(() => {
     const axiosConfig = generateAxiosConfig(window);
 
     axios
-      .get<any[]>(BATCHS_URL + "list_as_table/", axiosConfig)
+      .get<Batch[]>(BATCHS_URL, axiosConfig)
       .then((res) => {
-        console.log(res.data);
         setBatchs(res.data);
       })
       .catch((err) => setApiErrors(err));
@@ -62,6 +59,13 @@ const Inventario: NextPage = () => {
 
   return (
     <Fragment>
+      <EditModal
+        obj={deleteBatch}
+        apiUrl={BATCHS_URL}
+        formDict={{}}
+        onClose={() => setDeleteBatch(undefined)}
+        deleteOnly
+      />
       <FormTableContainer>
         <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-4 mt-8">
           <StyledListBox<any>
@@ -94,24 +98,49 @@ const Inventario: NextPage = () => {
             GUARDAR LOTE
           </button>
         </form>
-        {/* {Object.values(batchs).length > 0 ? (
-          <AutoTable tableObj={batchs} />
-        ) : (
-          <table className="table" />
-        )} */}
-        {
-          <table>
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header, index) => (
-                    <th key={header.id}>{header.column.columnDef.header}</th>
-                  ))}
+        <div>
+          {Object.values(batchs).length > 0 && (
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Producto</th>
+                  <th>Cantidad Inicial</th>
+                  <th>Cantidad Actual</th>
+                  <th>Precio de compra</th>
+                  <th>Total compra</th>
+                  <th>Total inventario</th>
+                  <th>Fecha comprado</th>
+                  <th></th>
                 </tr>
-              ))}
-            </thead>
-          </table>
-        }
+              </thead>
+
+              <tbody>
+                {batchs.map((batch, index) => (
+                  <tr key={"batch-row-" + index}>
+                    <td>{index + 1}</td>
+                    <td>{batch.product_name}</td>
+                    <td>{batch.initial_quantity.toLocaleString()}</td>
+                    <td>{batch.quantity.toLocaleString()}</td>
+                    <td>{batch.buy_price.toLocaleString()}</td>
+                    <td>
+                      {(
+                        batch.initial_quantity * batch.buy_price
+                      ).toLocaleString()}
+                    </td>
+                    <td>
+                      {(batch.quantity * batch.buy_price).toLocaleString()}
+                    </td>
+                    <td>{batch.date_created.toString()}</td>
+                    <td className="flex justify-end">
+                      <EditIconButton onClick={() => setDeleteBatch(batch)} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </FormTableContainer>
     </Fragment>
   );

@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { successStringAtom } from "../state/atoms";
+import { successStringSelector } from "../state/selectors";
 import ModalText from "./ModalText";
 
 const SuccessStringCatcher: FC = () => {
-  const successText = useRecoilValue(successStringAtom);
+  const successText = useRecoilValue(successStringSelector);
 
   const [checked, setChecked] = useState(false);
 
@@ -15,7 +15,7 @@ const SuccessStringCatcher: FC = () => {
   return (
     <ModalText
       text={successText}
-      containerClasses="bg-accent text-center"
+      containerClasses="bg-accent text-center z-50"
       checked={checked}
       setChecked={setChecked}
       modalID="success-modal"

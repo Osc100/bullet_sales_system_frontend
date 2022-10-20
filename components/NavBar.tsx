@@ -8,6 +8,7 @@ const navBarLinks = [
   { name: "Inventario", href: "/inventario" },
   { name: "Lotes", href: "/lotes" },
   { name: "Ventas", href: "/ventas" },
+  { name: "Vender", href: "/vender" },
   { name: "Registar Usuario", href: "/registro" },
 ];
 
@@ -25,7 +26,7 @@ const NavBar: FC<NavBarProps> = () => {
   }, []);
 
   return (
-    <div className="fixed navbar bg-base-200">
+    <div className="fixed z-30 navbar bg-base-200">
       <div className="navbar-start ml-[7%]">
         <ul>
           {navBarLinks.map((obj, index) => (
@@ -43,10 +44,6 @@ const NavBar: FC<NavBarProps> = () => {
             </li>
           ))}
         </ul>
-      </div>
-
-      <div className="font-semibold navbar-center font-2xl">
-        <p>Bullet Sales System</p>
       </div>
 
       <div className="navbar-end mr-[9%]">

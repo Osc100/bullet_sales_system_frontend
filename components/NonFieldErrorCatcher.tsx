@@ -5,14 +5,18 @@ import ModalText from "./ModalText";
 
 const NonFieldErrorCatcher: FC = () => {
   const errors = useRecoilValue(apiErrorsAtom);
+  console.log(errors);
 
   let errorText = "";
   for (const [key, value] of Object.entries(errors)) {
+    console.log(key);
+    console.log(key === "non_field_errors");
     if (key === "non_field_errors") {
       errorText = value;
       break;
     }
   }
+
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
@@ -22,7 +26,7 @@ const NonFieldErrorCatcher: FC = () => {
   return (
     <ModalText
       text={errorText}
-      containerClasses="bg-error"
+      containerClasses="bg-error z-50"
       checked={checked}
       setChecked={setChecked}
       modalID="non-field-error-modal"

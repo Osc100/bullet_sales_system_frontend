@@ -18,7 +18,7 @@ const Home: NextPage = () => {
     axios
       .post(BACKEND_URL + "login/", formData)
       .then((res) => {
-        window.sessionStorage.setItem("token", `Bearer ${res.data.token}`);
+        window.sessionStorage.setItem("token", `Token ${res.data.token}`);
         window.sessionStorage.setItem(
           "user",
           `${res.data.user.first_name} ${res.data.user.last_name}`

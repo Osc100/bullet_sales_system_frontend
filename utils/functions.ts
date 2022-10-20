@@ -1,6 +1,6 @@
 export function formDataAsDict(event: React.FormEvent<HTMLFormElement>) {
   const formData = new FormData(event.currentTarget);
-  let data: any = {};
+  let data: Record<string, unknown> = {};
 
   formData.forEach((value, key) => {
     data[key] = value;
@@ -26,3 +26,17 @@ export const generateAxiosConfig = (window: Window) => {
     headers: { Authorization: window.sessionStorage.getItem("token") ?? false },
   };
 };
+
+export function cleanErrorData(errorData: any) {
+  let cleanError = {};
+
+  for (const [key, value] of Object.entries(errorData)) {
+    if (Array.isArray(value)) {
+      cleanError[key] = value[0];
+    } else if (typeof value === "object" && value !== null) {
+      cleanError[key] = cleanErrorData(value);
+    }
+  }
+
+  return cleanError;
+}

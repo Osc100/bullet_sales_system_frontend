@@ -2,8 +2,7 @@ import axios from "axios";
 import { FC } from "react";
 import { useSetRecoilState } from "recoil";
 import Input from "../components/Input";
-import { successStringAtom } from "../state/atoms";
-import { apiErrorsSelector } from "../state/selectors";
+import { apiErrorsSelector, successStringSelector } from "../state/selectors";
 import { REGISTER_URL } from "../utils/consts";
 import { formDataAsDict, generateAxiosConfig } from "../utils/functions";
 
@@ -11,7 +10,7 @@ interface RegisterProps {}
 
 const Register: FC<RegisterProps> = () => {
   const setApiErrors = useSetRecoilState(apiErrorsSelector);
-  const setSuccessString = useSetRecoilState(successStringAtom);
+  const setSuccessString = useSetRecoilState(successStringSelector);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,8 +48,16 @@ const Register: FC<RegisterProps> = () => {
           name="password2"
           descriptiveText="Confirmar la contraseña"
         />
+        <div className="flex items-center w-full py-4 text-xl">
+          <p>Es superusuario: </p>
+          <input
+            type="checkbox"
+            name="is_superuser"
+            className="ml-4 checkbox checkbox-accent"
+          />
+        </div>
         <button
-          className="w-full mt-5 btn btn-success btn-outline"
+          className="w-full mt-1 btn btn-success btn-outline"
           formAction="submit"
         >
           REGISTRAR USUARIO
